@@ -633,6 +633,7 @@ function (add_doxygen_doc_target)
   endif ()
 
   set(pages index.md get-started.md api.md syntax.md)
+  # Keep in sync with INPUT in doc/Doxyfile.in.
   set(headers
       args.h
       chrono.h
@@ -677,8 +678,9 @@ function (add_doxygen_doc_target)
     list(APPEND header_paths ${CMAKE_CURRENT_SOURCE_DIR}/include/fmt/${header})
   endforeach ()
   # Doxygen processes pages in INPUT order: put the main page first.
-  string(REPLACE ";" " \\\n    " FMT_DOXYGEN_INPUT
-                 "${page_outputs};${header_paths}")
+  string(REPLACE ";" " \\\n    " FMT_DOXYGEN_PAGES_INPUT "${page_outputs}")
+  set(FMT_DOXYGEN_MAINPAGE ${FMT_DOXYGEN_PAGES_DIR}/index.md)
+  set(FMT_DOXYGEN_WARN_LOGFILE ${FMT_DOXYGEN_OUTPUT_DIR}/warnings.log)
   set(doxyfile ${FMT_DOXYGEN_OUTPUT_DIR}/Doxyfile)
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in ${doxyfile} @ONLY)
 
